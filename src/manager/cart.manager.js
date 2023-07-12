@@ -4,7 +4,7 @@ import fs from 'fs';
 export default class CartManager extends FileManager {
 
     constructor() {
-        super('../PrimerEntregableFinal/src/db/carts.json');
+        super("./src/db/cart.json");
     };
 
     create = async () => {
@@ -27,7 +27,7 @@ export default class CartManager extends FileManager {
             cart.id = await this.getNextId(elements);
             elements.push(cart);
             fs.promises.writeFile(this.path, JSON.stringify(elements));
-            return {status: 'Producto Agregado Exitosamente'}
+            return {status: 'Carrito creado exitosamente'}
         } catch {
             return {status: 'ERROR al escribir el archivo'}
         }
@@ -36,6 +36,7 @@ export default class CartManager extends FileManager {
 
     list = async (cid) => {
         const carts_list = await this.getCarts();
+        if(carts_list.length == 0) return { status: "No hay carritos creados" };
         const c_cart = carts_list.find(p => p.id === cid);
         return c_cart? c_cart : {status: 'Error al consultar Carrito'}
     };

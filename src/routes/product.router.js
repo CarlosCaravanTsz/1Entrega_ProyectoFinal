@@ -27,43 +27,54 @@ router.get('/:pid', async (req, res) => {
 
 
 router.post('/', async (req, res) => { // DONE: AGREGAR UN NUEVO PRODUCTO
+    try {
+        const new_product = {
+            title: req.body.title,
+            description: req.body.description,
+            code: req.body.code,
+            price: req.body.price,
+            status: true,
+            stock: req.body.stock,
+            category: req.body.category,
+            thumbnail: req.body.thumbnail,
+        };
 
-    const new_product = {
-        title: req.body.title,
-        description: req.body.description,
-        code: req.body.code,
-        price: req.body.price,
-        status: true,
-        stock: req.body.stock,
-        category: req.body.category,
-        thumbnail: req.body.thumbnail,
-    };
+        console.log(new_product);
+        const result = await productManager.addProduct(new_product);
+        const status = result ? result : { status: 'Error al agregar producto' };
+        res.status(200).send(status);
+    } catch {
+        res.status(500).send({ status: 'ERROR al agregar un producto' });
 
-    console.log(new_product);
-    const result = await productManager.addProduct(new_product);
-    const status = result ? result : { status: 'Error al agregar producto' };
-    res.status(200).send(status);
+    }
 
 });
 
 
 router.put('/:pid', async (req, res) => {
 
-    const obj = req.body;
-    const pid = parseInt(req.params.pid);
-    const result = await productManager.updateProduct(pid, obj);
-    const status = result ? result : { status: 'Error al agregar producto' };
-    res.status(200).send(status);
+    try {
+        const obj = req.body;
+        const pid = parseInt(req.params.pid);
+        const result = await productManager.updateProduct(pid, obj);
+        const status = result ? result : { status: 'Error al actualizar producto' };
+        res.status(200).send(status);
+    } catch {
+        res.status(500).send({ status: 'ERROR al actualizar un producto' });
 
+    }
 });
 
 
 router.delete('/:pid', async (req, res) => { // DEBE ELIMINAR (DESHABILITAR) EL PRODUCTO CON PID INDICADO
-
-    const pid = parseInt(req.params.pid);
-    const result = await productManager.deleteProduct(pid)
-    const status = result ? result : { status: 'Error al eliminar producto' };
-    res.status(200).send(status);
+    try {
+        const pid = parseInt(req.params.pid);
+        const result = await productManager.deleteProduct(pid)
+        const status = result ? result : { status: 'Error al eliminar producto' };
+        res.status(200).send(status);
+    } catch {
+        res.status(500).send({ status: 'ERROR al eliminar un producto' });
+    }
 });
 
 export default router

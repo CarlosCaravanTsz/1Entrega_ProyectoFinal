@@ -4,7 +4,7 @@ import FileManager from './file.manager.js';
 export default class ProductManager extends FileManager {
 
     constructor() {
-        super('../PrimerEntregableFinal/src/db/products.json');
+        super("./src/db/products.json");
     }
 
     addProduct = async (data) => {
@@ -66,6 +66,7 @@ export default class ProductManager extends FileManager {
 
         // Actualizacion de los campos
         for (const key of Object.keys(obj)) {
+            if(key == "id" || key == "code") continue
             products[idx][key] = obj[key]
             console.log('PRODUCTO: ', products[idx][key], '\nOBJ NUEVO: ', obj[key])
         }
